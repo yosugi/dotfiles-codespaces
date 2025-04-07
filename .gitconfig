@@ -1,0 +1,67 @@
+[user]
+    name = yosugi
+    email = yosugi@users.noreply.github.com
+[merge]
+    tool = vimdiff
+[mergetool]
+    prompt = false
+[diff]
+    tool = vimdiff
+[difftool]
+    prompt = false
+[alias]
+    ps = push
+    psf = push --force-with-lease
+    pl = pull
+    pob = !git push origin $(git rev-parse --abbrev-ref HEAD)
+    pfob = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
+    pr = !git pull --rebase
+    pro = !git pull --rebase origin
+    prob = !git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)
+    dno = diff --name-only
+    dnoe = "!f(){ git diff --name-status $1 | grep -v ^D | awk '{ print $NF }'; };f"
+    dnf = diff --name-status
+    sno = show --pretty="" --name-only
+    co = checkout
+    cob = checkout -b
+    cof = "!git branch | fzf | awk '{ print $NF }' | xargs -I{} git checkout {}"
+    cor = "!f(){ git checkout -b $(basename $1) $1; };f"
+    corf = "!(B=$(git branch -a | fzf | awk '{ print $NF }') && (git checkout -b $(basename $B) $B || git checkout $(basename $B)))"
+    st = status
+    b = branch
+    bf = !git branch | fzf | awk '{print $NF}'
+    ba = branch -a
+    baf = !git branch -a | fzf | awk '{print $NF}'
+    bd = branch -d
+    bD = branch -D
+    bm = branch -m
+    br = "!f(){ B=$(git rev-parse --abbrev-ref HEAD); git branch -m $B $1; };f"
+    bu = !(B=$(git rev-parse --abbrev-ref HEAD) && (git branch --set-upstream-to=origin/$B $B))
+    fo = "!f(){ git fetch origin $1:$1; };f"
+    foc = "!f(){ git fetch origin $1:$1; git checkout $1; };f"
+    pr = pull --rebase
+    ru = remote update
+    mnff = merge --no-ff
+    olog = log --oneline --date=iso
+#    hist = log --oneline --decorate --graph --date=iso
+    c = commit
+    cae = commit --allow-empty
+    ct = commit -am 'Temporary commit'
+    ca = commit --amend
+    ra = rebase --abort
+    rc = rebase --continue
+    cancel = reset --soft HEAD^
+    reamend = commit --amend -C HEAD
+    rea = commit --amend -C HEAD
+    cp = cherry-pick
+    dmb = !git branch | grep -v -E '^\\*|master|develop' | xargs -n1 -r echo git branch delete -d
+    drb = "!f(){ git branch | tr -d ' ' | grep -E $1 | xargs -n1 -r echo git branch -D; };f"
+    test = "!(f() { p=$(whoami); echo $p; }; f)"
+    CL = "!git reset --hard && git clean -d -f"
+[help]
+    autocorrect = 1
+[core]
+    editor = vim -c \"set fenc=utf-8\"
+    excludesfile = ~/.gitignore
+[commit]
+    cleanup = strip
