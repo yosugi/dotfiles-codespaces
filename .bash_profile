@@ -17,3 +17,4 @@ export PS1="[\u@\h \W]\$ "
 # export PS1="[\u@hostname \W]\$ "
 
 alias g='git'
+alias fd='fdfind'

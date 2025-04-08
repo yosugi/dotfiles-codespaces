@@ -33,6 +33,7 @@ sudo apt-get update -qq
 COMMANDS=(
   "fzf"
   "ripgrep"
+  "fd-find"
   "tig"
 )
 
