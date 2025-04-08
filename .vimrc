@@ -561,12 +561,65 @@ highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 "    colorscheme blue
 "endif
 
+"" tcvime {{{1 -----------------------------------------------------------------------------------------
+
+if isdirectory(expand('~/.vim/pack/plugins/start/tcvime'))
+    packadd tcvime
+    let tcvime_keymap = 'tutcodes'
+    " cf. https://gist.github.com/kozo2/4076375
+    if has('keymap')
+      set iminsert=0 imsearch=0
+      " 切替時にインデントが解除されるのを回避するため、1<C-H>
+      inoremap <C-J> 1<C-H><C-O>:call <SID>EnableKeymap('tutcodes')<CR>
+      inoremap <silent> <C-L> 1<C-H><C-O>:call <SID>DisableKeymap()<CR>
+      inoremap <silent> JJ 1<C-H><C-O>:call <SID>DisableKeymap()<CR><ESC>:<C-u>up<CR>
+      inoremap <silent> JK <ESC>:<C-u>up<CR>
+    "  inoremap <silent> FF 1<C-H><C-O>:call <SID>DisableKeymap()<CR><ESC>:<C-u>up<CR>
+    "  inoremap <silent> FD <ESC>:<C-u>up<CR>
+      inoremap <silent> ZZ 1<C-H><C-O>:call <SID>DisableKeymap()<CR><ESC>:<C-u>up<CR>
+      inoremap <silent> <ESC> <ESC>:set imsearch=0<CR>:call <SID>DisableKeymap()<CR>
+      nnoremap <silent> <C-K>k <Plug>TcvimeNKatakana<CR>
+      inoremap <silent> <unique> , <C-G>u<C-R>=tcvime#EnableKeymapOrInsertChar(',',0)<CR>
+    endif
+
+    function! s:EnableKeymap(keymapname)
+      call tcvime#SetKeymap(a:keymapname)
+      " <Space>で前置型交ぜ書き変換を開始するか、読みが無ければ' 'を挿入。
+      " (lmapにすると、lmap有効時にfやtやrの後の<Space>が使用不可。(<C-R>=なので))
+    "  inoremap <silent> <Space> <Plug>TcvimeIConvOrSpace
+    endfunction
+
+    function! s:DisableKeymap()
+      let &iminsert = 0
+      silent! iunmap <Space>
+      TcvimeCloseHelp
+    endfunction
+
+    " lmapのカスタマイズを行う関数。
+    " tcvime#SetKeymap()からコールバックされる。
+    function! TcvimeCustomKeymap()
+      " tc2同様の後置型交ぜ書き変換を行うための設定:
+      " 活用しない語
+      lmap <silent> alj <C-R>=tcvime#InputPostConvertStart(0)<CR>
+      lmap <silent> al1 <C-R>=tcvime#InputPostConvert(1, 0)<CR>
+      lmap <silent> al2 <C-R>=tcvime#InputPostConvert(2, 0)<CR>
+      lmap <silent> al3 <C-R>=tcvime#InputPostConvert(3, 0)<CR>
+      lmap <silent> al4 <C-R>=tcvime#InputPostConvert(4, 0)<CR>
+      lmap <silent> al5 <C-R>=tcvime#InputPostConvert(5, 0)<CR>
+      lmap <silent> al6 <C-R>=tcvime#InputPostConvert(6, 0)<CR>
+      lmap <silent> al7 <C-R>=tcvime#InputPostConvert(7, 0)<CR>
+      lmap <silent> al8 <C-R>=tcvime#InputPostConvert(8, 0)<CR>
+      lmap <silent> al9 <C-R>=tcvime#InputPostConvert(9, 0)<CR>
+      lmap <silent> als <C-G>u<Plug>TcvimeIBushu
+      lmap <silent> a' <C-G>u<Plug>TcvimeIDisableKeymap
+      lmap <silent> <Space>. <C-G>u<Plug>TcvimeIDisableKeymap<Space>
+      lmap <silent> <Space>/ <C-G>u<Plug>TcvimeIDisableKeymap<Space>
+    endfunction
+endif
 
 "" local settings {{{1 -----------------------------------------------------------------------------
 
 runtime! config/*.vim
-
-
 
 "" }}}1
 
@@ -576,5 +629,3 @@ runtime! config/*.vim
 " vim: foldcolumn=0
 " vim: foldlevel=0
 " vim: nofoldenable
-
-
