@@ -25,30 +25,7 @@ for file in "${DOTFILES[@]}"; do
   fi
 done
 
-echo "Installing cli tools..."
-
-sudo apt-get update -qq
-
-# Tools to install
-COMMANDS=(
-  "fzf"
-  "ripgrep"
-  "fd-find"
-  "tig"
-)
-
-for cmd in "${COMMANDS[@]}"; do
-  if ! command -v "$cmd" &> /dev/null; then
-    sudo apt-get install -y "$cmd"
-    echo "Installed $cmd"
-  else
-    echo "$cmd already installed"
-  fi
-done
-
-# ------------------------------
-# 3. Vim プラグインのインストール
-# ------------------------------
+# Install Vim plugins
 echo "Installing vim plugins..."
 
 VIM_PLUGIN_DIR="$HOME/.vim/pack/plugins/start"
@@ -73,6 +50,34 @@ done
 
 wait
 echo "Vim plugins installed."
+
+# Install CLI tools
+echo "Installing cli tools..."
+# Check if apt-get is available
+if ! command -v apt-get &> /dev/null; then
+  echo "apt-get not found. Skipping CLI tools installation."
+  echo "All setup complete."
+  exit 0
+fi
+
+sudo apt-get update -qq
+
+# Tools to install
+COMMANDS=(
+  "fzf"
+  "ripgrep"
+  "fd-find"
+  "tig"
+)
+
+for cmd in "${COMMANDS[@]}"; do
+  if ! command -v "$cmd" &> /dev/null; then
+    sudo apt-get install -y "$cmd"
+    echo "Installed $cmd"
+  else
+    echo "$cmd already installed"
+  fi
+done
 
 echo "All setup complete."
 
