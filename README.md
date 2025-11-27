@@ -14,12 +14,13 @@ This repository sets up basic development environment configuration for use in G
 The `setup.sh` script:
 
 1. Creates symbolic links from repository files to your `$HOME` directory
-2. Installs required CLI tools: `ripgrep`, `fzf`, `tig`
-3. Installs the following Vim plugins under `~/.vim/pack/plugins/start/`:
+2. Installs the following Vim plugins under `~/.vim/pack/plugins/start/`:
    - [fzf](https://github.com/junegunn/fzf)
    - [fzf.vim](https://github.com/junegunn/fzf.vim)
    - [vim-sandwich](https://github.com/machakann/vim-sandwich)
-   - [tcvime.git](https://github.com/yosugi/tcvime.git)
+   - [tcvime](https://github.com/yosugi/tcvime)
+3. Installs [ccd](https://github.com/yosugi/ccd.zsh) (customized cd command, available as `,cd`)
+4. Installs CLI tools: `fzf`, `ripgrep`, `fd-find`, `tig`
 
 ## Usage
 

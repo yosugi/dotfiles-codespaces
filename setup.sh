@@ -51,6 +51,16 @@ done
 wait
 echo "Vim plugins installed."
 
+# Install ccd
+echo "Installing ccd..."
+CCD_DIR="$HOME/.local/share/ccd"
+if [ ! -d "$CCD_DIR" ]; then
+    git clone --depth=1 https://github.com/yosugi/ccd.sh.git "$CCD_DIR"
+    echo "ccd installed."
+else
+    echo "ccd already installed."
+fi
+
 # Install CLI tools
 echo "Installing cli tools..."
 # Check if apt-get is available

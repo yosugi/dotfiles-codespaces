@@ -18,3 +18,9 @@ export PS1="[\u@\h \W]\$ "
 
 alias g='git'
 alias fd='fdfind'
+
+# ccd
+if [ -f ~/.local/share/ccd/ccd.sh ]; then
+    source ~/.local/share/ccd/ccd.sh
+    alias ,cd='ccd'
+fi
