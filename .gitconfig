@@ -9,42 +9,77 @@
     tool = vimdiff
 [difftool]
     prompt = false
+[help]
+    autocorrect = 1
+[core]
+    editor = vim -c \"set fenc=utf-8\"
+    excludesfile = ~/.gitignore
+    quotepath = false
+    precomposeunicode = true
+[commit]
+    cleanup = strip
+[pull]
+    ff = only
+    rebase = true
 [alias]
     ps = push
     psf = push --force-with-lease
-    pl = pull
+    po = push origin
+    pf = push --force-with-lease
+    pfo = push --force-with-lease origin
     pob = !git push origin $(git rev-parse --abbrev-ref HEAD)
+#    pob = !git push origin $(git rev-parse --abbrev-ref HEAD) | grep github.com | awk '{print $2}' | pbcopy
     pfob = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD)
-    pr = !git pull --rebase
-    pro = !git pull --rebase origin
+#    pfob = !git push --force-with-lease origin $(git rev-parse --abbrev-ref HEAD) | grep github.com | awk '{print $2}' | pbcopy
+    pl = pull
+    pff = pull --ff
+    pr = pull --rebase
+    pro = pull --rebase origin
     prob = !git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)
+    prom = pull --rebase origin main
     dno = diff --name-only
     dnoe = "!f(){ git diff --name-status $1 | grep -v ^D | awk '{ print $NF }'; };f"
-    dnf = diff --name-status
+    dnom = diff --name-only main
+    dns = diff --name-status
     sno = show --pretty="" --name-only
-    co = checkout
-    cob = checkout -b
-    cof = "!git branch | fzf | awk '{ print $NF }' | xargs -I{} git checkout {}"
-    cor = "!f(){ git checkout -b $(basename $1) $1; };f"
-    corf = "!(B=$(git branch -a | fzf | awk '{ print $NF }') && (git checkout -b $(basename $B) $B || git checkout $(basename $B)))"
+    c = checkout
+    c- = checkout -
+    cb = checkout -b
+    cm = checkout main
+    cf = "!git branch | fzf | awk '{ print $NF }' | xargs -I{} git checkout {}"
+    cr = "!f(){ git checkout -b $(basename $1) $1; };f"
+    crf = "!(B=$(git branch -a | fzf | awk '{ print $NF }') && (git checkout -b $(basename $B) $B || git checkout $(basename $B)))"
+    s = checkout
+    s- = checkout -
+    sb = checkout -b
+    sm = checkout main
+    sf = "!git branch | fzf | awk '{ print $NF }' | xargs -I{} git checkout {}"
+    sr = "!f(){ git checkout -b $(basename $1) $1; };f"
+    srf = "!(B=$(git branch -a | fzf | awk '{ print $NF }') && (git checkout -b $(echo $B | sed -e 's#remotes/[^/]*/##') $B || git checkout $(basename $B)))"
+    sp = checkout production
     st = status
     b = branch
+    bc = !git rev-parse --abbrev-ref HEAD
     bf = !git branch | fzf | awk '{print $NF}'
     ba = branch -a
     baf = !git branch -a | fzf | awk '{print $NF}'
     bd = branch -d
     bD = branch -D
     bm = branch -m
-    br = "!f(){ B=$(git rev-parse --abbrev-ref HEAD); git branch -m $B $1; };f"
+    bmb = !git branch -m $(git rev-parse --abbrev-ref HEAD)
+    bM = branch -M
     bu = !(B=$(git rev-parse --abbrev-ref HEAD) && (git branch --set-upstream-to=origin/$B $B))
     fo = "!f(){ git fetch origin $1:$1; };f"
     foc = "!f(){ git fetch origin $1:$1; git checkout $1; };f"
     pr = pull --rebase
     ru = remote update
+    rv = remote -v
     mnff = merge --no-ff
-    olog = log --oneline --date=iso
+    lo = log --oneline --date=iso
+    ll =  log --oneline --date=iso -n 1
 #    hist = log --oneline --decorate --graph --date=iso
     c = commit
+    cm = commit -m
     cae = commit --allow-empty
     ct = commit -am 'Temporary commit'
     ca = commit --amend
@@ -53,15 +88,25 @@
     cancel = reset --soft HEAD^
     reamend = commit --amend -C HEAD
     rea = commit --amend -C HEAD
+    re = commit --amend -C HEAD
     cp = cherry-pick
-    dmb = !git branch | grep -v -E '^\\*|master|develop' | xargs -n1 -r echo git branch delete -d
+    dmb = !git branch | grep -v -E '^\\*|main|develop' | xargs -n1 -r echo git branch delete -d
     drb = "!f(){ git branch | tr -d ' ' | grep -E $1 | xargs -n1 -r echo git branch -D; };f"
     test = "!(f() { p=$(whoami); echo $p; }; f)"
     CL = "!git reset --hard && git clean -d -f"
-[help]
-    autocorrect = 1
-[core]
-    editor = vim -c \"set fenc=utf-8\"
-    excludesfile = ~/.gitignore
-[commit]
-    cleanup = strip
+    wta = "!f() { git worktree add .git/worktrees/$1; }; f"
+    wtr = "!(f() { git worktree remove .git/worktrees/$1; }; f)"
+    wtrf = !git worktree list | fzf | awk \"{print \\$1}\" | xargs -r git worktree remove
+    ir = "!f() { git rebase -i HEAD~"${1:-2}"; }; f"
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path = 
+[mergetool "sourcetree"]
+    cmd = /private/var/folders/2n/vy4p2t8x2fq3jfqbtcffrmlh0000gp/T/AppTranslocation/1945F43D-4B46-48D7-A93B-DB2B732F8CAA/d/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
+
