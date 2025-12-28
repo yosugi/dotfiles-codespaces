@@ -61,6 +61,15 @@ else
     echo "ccd already installed."
 fi
 
+# Install Claude Code
+echo "Installing Claude Code..."
+if ! command -v claude &> /dev/null; then
+    curl -fsSL https://claude.ai/install.sh | bash
+    echo "Claude Code installed."
+else
+    echo "Claude Code already installed."
+fi
+
 # Install CLI tools
 echo "Installing cli tools..."
 # Check if apt-get is available
