@@ -11,6 +11,7 @@ DOTFILES=(
   ".bash_profile"
   ".gitconfig"
   ".gitignore"
+  ".tmux.conf"
 )
 
 for file in "${DOTFILES[@]}"; do
@@ -87,6 +88,7 @@ COMMANDS=(
   "ripgrep"
   "fd-find"
   "tig"
+  "tmux"
 )
 
 for cmd in "${COMMANDS[@]}"; do
